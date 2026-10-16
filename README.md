@@ -39,7 +39,7 @@ Installation & Setup
 
 Clone the repository:
 
-git clone https://github.com/vishvajeetjadhav2812-sketch/spice-delight.git
+git clone https://github.com/vishvajeetjadhav2812-sketch/pyhton_project_NSDC/blob/main/index.html
 cd spice-delight
 
 
