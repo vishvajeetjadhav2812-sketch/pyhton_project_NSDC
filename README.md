@@ -39,7 +39,7 @@ Installation & Setup
 
 Clone the repository:
 
-git clone https://github.com/your-username/spice-delight.git
+git clone https://github.com/vishvajeetjadhav2812-sketch/spice-delight.git
 cd spice-delight
 
 
