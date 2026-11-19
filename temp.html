@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Snap Camera</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: #f5eaff;
+            padding: 15px;
+        }
+
+        h1 { color: #7b2ff7; }
+
+        video {
+            width: 320px;
+            max-width: 95%;
+            border-radius: 20px;
+        }
+
+        button {
+            padding: 12px 18px;
+            margin: 6px;
+            border: none;
+            border-radius: 20px;
+            background: #7b2ff7;
+            color: white;
+            cursor: pointer;
+        }
+
+        #compliment {
+            color: #e91e63;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            width: 220px;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .card p {
+            color: #e91e63;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📸 My Snap Camera</h1>
+
+    <video id="camera" autoplay playsinline></video>
+    <br>
+
+    <button onclick="openCamera()">Open Camera</button>
+    <button onclick="takePhoto()">📸 Click Photo</button>
+
+    <p id="compliment">Ready for your best snap? ✨</p>
+
+    <h2>My Photo Gallery ❤️</h2>
+    <div id="gallery"></div>
+
+    <script>
+        let camera = document.getElementById("camera");
+        let gallery = document.getElementById("gallery");
+        let compliment = document.getElementById("compliment");
+
+        let compliments = [
+            "✨ Looking amazing!",
+            "😎 Too cool to handle!",
+            "❤️ You are beautiful!",
+            "🔥 Main character energy!",
+            "🌟 Born to shine!",
+            "🥰 Smile, you look awesome!",
+            "💖 You are a star!",
+            "😍 Absolutely stunning!"
+        ];
+
+        let photos = [];
+
+        async function openCamera() {
+            try {
+                let stream =
+                    await navigator.mediaDevices.getUserMedia({
+                        video: true
+                    });
+
+                camera.srcObject = stream;
+            } catch (error) {
+                alert("Please allow camera permission!");
+            }
+        }
+
+        function takePhoto() {
+            if (!camera.srcObject) {
+                alert("Please open the camera first!");
+                return;
+            }
+
+            let canvas = document.createElement("canvas");
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+
+            let context = canvas.getContext("2d");
+            context.drawImage(camera, 0, 0);
+
+            let image = canvas.toDataURL("image/jpeg", 0.85);
+
+            let message = compliments[
+                Math.floor(Math.random() * compliments.length)
+            ];
+
+            compliment.textContent = message;
+
+            photos.push({
+                image: image,
+                message: message
+            });
+
+            showPhotos();
+        }
+
+        function showPhotos() {
+            gallery.innerHTML = "";
+
+            photos.forEach(function(item, index) {
+                let card = document.createElement("div");
+                card.className = "card";
+
+                let img = document.createElement("img");
+                img.src = item.image;
+
+                let text = document.createElement("p");
+                text.textContent = item.message;
+
+                let download = document.createElement("a");
+                download.href = item.image;
+                download.download = "my-snap-" + (index + 1) + ".jpg";
+                download.textContent = "Download Photo";
+
+                let br = document.createElement("br");
+
+                let remove = document.createElement("button");
+                remove.textContent = "Delete Photo";
+                remove.onclick = function() {
+                    photos.splice(index, 1);
+                    showPhotos();
+                };
+
+                card.append(img, text, download, br, remove);
+                gallery.appendChild(card);
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spice Delight | Taste the Tradition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="nav">
+    <a href="#home" class="logo">🌶️ Spice Delight</a>
+    <nav>
+      <a href="#menu">Menu</a>
+      <a href="#book">Book a Table</a>
+      <a href="#feedback">Feedback</a>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div>
+      <h1>Spice Delight</h1>
+      <p>Where every bite tells a story of tradition.</p>
+      <a href="#menu" class="btn">Order Now</a>
+      <a href="#book" class="btn btn-ghost">Reserve a Table</a>
+    </div>
+  </section>
+
+  <main>
+    <!-- MENU & ORDER -->
+    <section id="menu">
+      <h2>Our Menu</h2>
+      {% for category, items in menu.items() %}
+        <h3 class="cat">{{ category }}</h3>
+        <div class="grid">
+          {% for item in items %}
+          <article class="card" data-id="{{ item.id }}" data-price="{{ item.price }}">
+            <div class="icon">{{ item.icon }}</div>
+            <h4>{{ item.name }}</h4>
+            <p class="desc">{{ item.desc }}</p>
+            <div class="row">
+              <strong>₹{{ item.price }}</strong>
+              <div class="qty">
+                <button type="button" class="minus" aria-label="Decrease">−</button>
+                <span class="count">0</span>
+                <button type="button" class="plus" aria-label="Increase">+</button>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <form id="orderForm" class="panel">
+        <h3>Your Order</h3>
+        <p id="cartSummary" class="muted">No items added yet.</p>
+        <div class="fields">
+          <input id="oName" placeholder="Your name" required>
+          <input id="oPhone" placeholder="Phone number" inputmode="tel" required>
+        </div>
+        <p class="msg" id="orderMsg"></p>
+        <button class="btn" type="submit">Place Order &amp; Get Bill</button>
+      </form>
+
+      <div id="bill" class="bill" hidden></div>
+    </section>
+
+    <!-- TABLE BOOKING -->
+    <section id="book">
+      <h2>Book a Table</h2>
+      <form id="bookForm" class="panel">
+        <div class="fields">
+          <input id="bName" placeholder="Your name" required>
+          <input id="bDate" type="date" min="{{ today }}" required>
+          <select id="bTime" required>
+            <option value="">Select time</option>
+            {% for h in range(12, 23) %}
+              <option value="{{ '%02d' % h }}:00">{{ (h - 1) % 12 + 1 }}:00 {{ 'PM' if h >= 12 else 'AM' }}</option>
+              <option value="{{ '%02d' % h }}:30">{{ (h - 1) % 12 + 1 }}:30 {{ 'PM' if h >= 12 else 'AM' }}</option>
+            {% endfor %}
+          </select>
+          <input id="bGuests" type="number" min="1" max="20" placeholder="Guests" required>
+        </div>
+        <p class="msg" id="bookMsg"></p>
+        <button class="btn" type="submit">Reserve Table</button>
+      </form>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section id="feedback">
+      <h2>Customer Feedback</h2>
+      <form id="fbForm" class="panel">
+        <div class="stars" id="stars" role="radiogroup" aria-label="Rating">
+          <button type="button" data-v="1">★</button><button type="button" data-v="2">★</button>
+          <button type="button" data-v="3">★</button><button type="button" data-v="4">★</button>
+          <button type="button" data-v="5">★</button>
+        </div>
+        <input id="fName" placeholder="Your name (optional)">
+        <textarea id="fMsg" rows="4" placeholder="Tell us about your experience..." required></textarea>
+        <p class="msg" id="fbMsg"></p>
+        <button class="btn" type="submit">Submit Feedback</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>© Spice Delight · Open daily 12:00 PM – 11:00 PM</footer>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
